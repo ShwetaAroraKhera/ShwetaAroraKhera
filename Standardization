@@ -1,0 +1,633 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled3.ipynb",
+      "provenance": [],
+      "authorship_tag": "ABX9TyNOPzg8qECfk3DZqIu+5iKy",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/ShwetaAroraKhera/ShwetaAroraKhera/blob/main/Standardization\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "id": "zlhyyAN-r-3M"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import matplotlib.pyplot as plt\n",
+        "%matplotlib inline"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "data = pd.read_csv(\"https://archive.ics.uci.edu/ml/machine-learning-databases/00291/airfoil_self_noise.dat\",\n",
+        "                   sep=\"\\t\", header=None, names=['Freq', 'Angle', 'ChordLength', 'Velocity', 'SuctionThickness', 'SoundLevel'])"
+      ],
+      "metadata": {
+        "id": "TbBWhHUQsNza"
+      },
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "metadata": {
+        "id": "OY6PNX09sOFT"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "X = data [['Freq','Angle','ChordLength', 'Velocity', 'SuctionThickness']]"
+      ],
+      "metadata": {
+        "id": "6SnlHaWHsAEB"
+      },
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "y = data[['SoundLevel']]"
+      ],
+      "metadata": {
+        "id": "PyrbyjPvsAG-"
+      },
+      "execution_count": 5,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "type(X)\n",
+        "type(y)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "wpUkfrnesAKH",
+        "outputId": "675cefbe-e6bd-4ebb-cdf2-6321aa94a7d7"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "pandas.core.frame.DataFrame"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.model_selection import train_test_split\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=1)"
+      ],
+      "metadata": {
+        "id": "VBadz2f6sANS"
+      },
+      "execution_count": 7,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Standardization**"
+      ],
+      "metadata": {
+        "id": "lDd4BmRHscAx"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.preprocessing import StandardScaler\n",
+        "from sklearn.compose import ColumnTransformer"
+      ],
+      "metadata": {
+        "id": "saqIhxQQsAQl"
+      },
+      "execution_count": 8,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "ct = ColumnTransformer([('X_train', StandardScaler(), ['Angle', 'Velocity'])\n",
+        "    ], remainder='passthrough')"
+      ],
+      "metadata": {
+        "id": "Mb5ietLisATg"
+      },
+      "execution_count": 9,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "X_train_scaled = ct.fit_transform(X_train)\n",
+        "print(X_train_scaled)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "HDQ0l1-XsAWj",
+        "outputId": "ff84376c-72d1-4ec4-e119-41ff66e71d82"
+      },
+      "execution_count": 10,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[-1.11829464e+00  1.31886248e+00  1.25000000e+03  2.28600000e-01\n",
+            "   2.14345000e-03]\n",
+            " [-1.11829464e+00  1.31886248e+00  1.60000000e+03  2.28600000e-01\n",
+            "   2.14345000e-03]\n",
+            " [-5.57029398e-01  1.31886248e+00  8.00000000e+03  1.01600000e-01\n",
+            "   2.02822000e-03]\n",
+            " ...\n",
+            " [ 4.97468931e-01 -7.26705119e-01  6.30000000e+03  2.54000000e-02\n",
+            "   4.49821000e-03]\n",
+            " [-1.11829464e+00 -1.23648380e+00  1.25000000e+03  2.28600000e-01\n",
+            "   2.72380000e-03]\n",
+            " [ 4.97468931e-01  1.31886248e+00  1.60000000e+03  2.54000000e-02\n",
+            "   4.20654000e-03]]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.linear_model import LinearRegression\n",
+        "lr = LinearRegression()"
+      ],
+      "metadata": {
+        "id": "HRXUtRTSsnT_"
+      },
+      "execution_count": 11,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "lr.fit(X_train_scaled, y_train)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "yckGJJgKsnWv",
+        "outputId": "ddcf3db4-c950-48ac-9fce-57f04388704b"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "LinearRegression()"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "X_test_scaled = ct.transform(X_test)"
+      ],
+      "metadata": {
+        "id": "Ln0aOhlmsnZr"
+      },
+      "execution_count": 13,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "y_pred1 = lr.predict(X_test_scaled)\n",
+        "y_pred1[:30]\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "lMCq9X22sncL",
+        "outputId": "cb9c5716-cee1-48ab-cf86-57f8e045db7b"
+      },
+      "execution_count": 15,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array([[119.67538751],\n",
+              "       [119.81150781],\n",
+              "       [125.9967535 ],\n",
+              "       [126.01349344],\n",
+              "       [130.68978942],\n",
+              "       [124.01104362],\n",
+              "       [129.96645572],\n",
+              "       [127.96287322],\n",
+              "       [127.59099693],\n",
+              "       [125.13472564],\n",
+              "       [121.17488679],\n",
+              "       [121.90875174],\n",
+              "       [121.67347252],\n",
+              "       [125.87156542],\n",
+              "       [114.69637968],\n",
+              "       [123.97915082],\n",
+              "       [120.22699558],\n",
+              "       [122.04214147],\n",
+              "       [133.0840635 ],\n",
+              "       [123.97724937],\n",
+              "       [127.28157163],\n",
+              "       [120.26436048],\n",
+              "       [118.43152819],\n",
+              "       [131.7998307 ],\n",
+              "       [125.55084725],\n",
+              "       [130.28455639],\n",
+              "       [134.07912881],\n",
+              "       [123.004296  ],\n",
+              "       [126.87550534],\n",
+              "       [124.76150324]])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 15
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "y_test[:30]"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 990
+        },
+        "id": "M9OoHFGbs1lX",
+        "outputId": "eac5dbbe-a4ab-4b56-a045-1ad3dfab378b"
+      },
+      "execution_count": 16,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/html": [
+              "\n",
+              "  <div id=\"df-811d569b-3481-4ece-8bd2-112fa9ce7b17\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>SoundLevel</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>91</th>\n",
+              "      <td>117.741</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>75</th>\n",
+              "      <td>118.122</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1213</th>\n",
+              "      <td>120.657</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>330</th>\n",
+              "      <td>122.229</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1352</th>\n",
+              "      <td>129.343</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>774</th>\n",
+              "      <td>126.590</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1038</th>\n",
+              "      <td>133.436</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1078</th>\n",
+              "      <td>131.582</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1166</th>\n",
+              "      <td>111.911</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>335</th>\n",
+              "      <td>129.969</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>685</th>\n",
+              "      <td>118.619</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>181</th>\n",
+              "      <td>126.343</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1221</th>\n",
+              "      <td>123.917</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>101</th>\n",
+              "      <td>129.004</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>692</th>\n",
+              "      <td>108.689</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1127</th>\n",
+              "      <td>125.398</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>169</th>\n",
+              "      <td>117.785</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>926</th>\n",
+              "      <td>123.255</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1296</th>\n",
+              "      <td>132.304</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>414</th>\n",
+              "      <td>125.724</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1396</th>\n",
+              "      <td>135.540</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1280</th>\n",
+              "      <td>119.561</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1467</th>\n",
+              "      <td>110.447</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>808</th>\n",
+              "      <td>123.742</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>102</th>\n",
+              "      <td>127.634</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1100</th>\n",
+              "      <td>124.756</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1244</th>\n",
+              "      <td>131.725</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>922</th>\n",
+              "      <td>123.695</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1138</th>\n",
+              "      <td>129.977</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>761</th>\n",
+              "      <td>128.518</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-811d569b-3481-4ece-8bd2-112fa9ce7b17')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-811d569b-3481-4ece-8bd2-112fa9ce7b17 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-811d569b-3481-4ece-8bd2-112fa9ce7b17');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ],
+            "text/plain": [
+              "      SoundLevel\n",
+              "91       117.741\n",
+              "75       118.122\n",
+              "1213     120.657\n",
+              "330      122.229\n",
+              "1352     129.343\n",
+              "774      126.590\n",
+              "1038     133.436\n",
+              "1078     131.582\n",
+              "1166     111.911\n",
+              "335      129.969\n",
+              "685      118.619\n",
+              "181      126.343\n",
+              "1221     123.917\n",
+              "101      129.004\n",
+              "692      108.689\n",
+              "1127     125.398\n",
+              "169      117.785\n",
+              "926      123.255\n",
+              "1296     132.304\n",
+              "414      125.724\n",
+              "1396     135.540\n",
+              "1280     119.561\n",
+              "1467     110.447\n",
+              "808      123.742\n",
+              "102      127.634\n",
+              "1100     124.756\n",
+              "1244     131.725\n",
+              "922      123.695\n",
+              "1138     129.977\n",
+              "761      128.518"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 16
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from sklearn.metrics import mean_absolute_error"
+      ],
+      "metadata": {
+        "id": "yNgm5w4Ds1o1"
+      },
+      "execution_count": 17,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "mae = mean_absolute_error(y_pred1, y_test)\n",
+        "\n",
+        "print(\"Mean Absolute Error :\", round(mae, 2))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "iex4Kkv9s8R6",
+        "outputId": "f506edf1-210d-404a-9860-d8d61352a2b2"
+      },
+      "execution_count": 18,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mean Absolute Error : 3.88\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        ""
+      ],
+      "metadata": {
+        "id": "Jl1ykiPxs8U9"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
